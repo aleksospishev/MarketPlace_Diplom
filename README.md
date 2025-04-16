@@ -27,7 +27,7 @@
 ### 1. Клонируйте репозиторий
 
 ```bash
-git clone https://github.com/your-username/marketplace.git
+git clone git@github.com:aleksospishev/MarketPlace_Diplom.git
 cd marketplace
 ```
 ### 2. Создайте файл .env
