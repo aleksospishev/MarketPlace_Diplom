@@ -141,8 +141,16 @@ EMAIL_HOST_USER = os.getenv("E_MAIL")
 EMAIL_HOST_PASSWORD = os.getenv("PASS_MAIL")
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+#
+# if "test" in sys.argv:
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.sqlite3",
+#             "NAME": BASE_DIR / "test_db.sqlite3",
+#         }
+#     }
 
-if "test" in sys.argv:
+if os.environ.get("USE_SQLITE_FOR_TESTS") == "1":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
