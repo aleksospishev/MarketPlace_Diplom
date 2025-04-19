@@ -15,6 +15,8 @@ from users.serializers import (
     UserProfileSerializer,
     UserRegistrationSerializer,
 )
+from MarketPlace_project.settings import EMAIL_HOST_USER
+
 
 
 class RegisterView(generics.CreateAPIView):
@@ -47,13 +49,14 @@ class PasswordResetView(generics.GenericAPIView):
         user = get_object_or_404(User, email=serializer.validated_data["email"])
 
         uid = urlsafe_base64_encode(force_bytes(user.pk))
+        print(f'uid={uid}')
         token = default_token_generator.make_token(user)
-
-        reset_url = f"/users/reset_password_confirm/?uid={uid}&token={token}"
+        host = self.request.get_host()
+        reset_url = f"http://{host}/users/reset_password_confirm/?uid={uid}&token={token}"
         send_mail(
             "Reset your password",
             f"Link: {reset_url}",
-            "admin@example.com",
+            EMAIL_HOST_USER,
             [user.email],
         )
         return Response({"message": "Password reset email sent."})
@@ -66,9 +69,9 @@ class PasswordResetConfirmView(generics.GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        uid = serializer.validated_data["uid"]
-        token = serializer.validated_data["token"]
+        print(self.request.query_params)
+        uid = self.request.query_params.get("uid")
+        token = self.request.query_params.get("token")
         new_password = serializer.validated_data["new_password"]
 
         try:

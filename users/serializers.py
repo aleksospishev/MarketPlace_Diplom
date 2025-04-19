@@ -20,6 +20,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             "password",
             "image",
             "city",
+
         )
 
 
@@ -35,6 +36,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "password",
             "image",
             "city",
+            "role"
         )
 
 
@@ -43,6 +45,4 @@ class PasswordResetSerializer(serializers.Serializer):
 
 
 class PasswordResetConfirmSerializer(serializers.Serializer):
-    uid = serializers.CharField()
-    token = serializers.CharField()
     new_password = serializers.CharField(write_only=True)
