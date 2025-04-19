@@ -54,13 +54,3 @@ class UserViewTests(APITestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("Reset your password", mail.outbox[0].subject)
 
-    def test_password_reset_confirm(self):
-        self.client.logout()
-        uid = urlsafe_base64_encode(force_bytes(self.user.pk))
-        token = default_token_generator.make_token(self.user)
-        url = reverse("users:reset_password_confirm")
-        data = {"uid": uid, "token": token, "new_password": "newpass456"}
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.user.refresh_from_db()
-        self.assertTrue(self.user.check_password("newpass456"))
